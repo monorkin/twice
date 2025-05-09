@@ -11,4 +11,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  resources :install, only: %i[ show ], param: :license_key
+
+  post "webhooks/order/created", to: "webhooks#order_created", as: :order_created_webhook
 end

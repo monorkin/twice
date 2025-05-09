@@ -1,0 +1,20 @@
+<%# vim: set ft=bash: %>
+#!/usr/bin/env bash
+set -e
+
+echo "Installing the TWICE command..."
+echo
+
+sudo true
+
+command_path="<%= url_for %>?arch=$(arch)&platform=$(uname)"
+curl -s "$command_path" -o .twice_tmp
+sudo mv .twice_tmp /usr/local/bin/twice
+sudo chmod +x /usr/local/bin/twice
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # Don't use sudo on macOS; Docker Desktop is likely to be running as the user
+  /usr/local/bin/twice setup <%= @license.formatted_key %>
+else
+  sudo /usr/local/bin/twice setup <%= @license.formatted_key %>
+fi
