@@ -1,0 +1,11 @@
+sphere_sorter:
+  name: Sphere Sorter
+  slug: sphere-sorter
+
+shardplate_polisher:
+  name: Shardplate Polisher
+  slug: shardplate_polisher
+
+soulcastify:
+  name: Soulcastify
+  slug: soulcastify
