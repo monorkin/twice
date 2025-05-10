@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class InstallController < ApplicationController
-  before_action :set_license
-  helper_method :license_key
+  rate_limit to: 5, within: 1.minute
+  before_action :set_customer
 
-  def show
+  def install
+  end
+
+  def download
   end
 
   private
 
-    def set_license
-      @license = License.find_by_key!(params[:license_key])
+    def set_customer
+      @customer = Customer.find_by_license_key!(params[:license_key])
     end
 end

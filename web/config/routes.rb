@@ -12,7 +12,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  resources :install, only: %i[ show ], param: :license_key
+  get "/install/:license_key", to: "install#install", as: :install
+  get "/install/:license_key/download", to: "install#download", as: :install_download
 
   post "webhooks/order/created", to: "webhooks#order_created", as: :order_created_webhook
 end

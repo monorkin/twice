@@ -1,11 +1,11 @@
 sphere_sorter:
   name: Sphere Sorter
-  slug: sphere-sorter
+  repository: sphere-sorter
 
 shardplate_polisher:
   name: Shardplate Polisher
-  slug: shardplate_polisher
+  slug: armor/shardplate_polisher
 
 soulcastify:
   name: Soulcastify
-  slug: soulcastify
+  slug: magic/soulcastify
