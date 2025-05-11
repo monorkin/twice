@@ -4,8 +4,8 @@ sphere_sorter:
 
 shardplate_polisher:
   name: Shardplate Polisher
-  slug: armor/shardplate_polisher
+  repository: armor/shardplate_polisher
 
 soulcastify:
   name: Soulcastify
-  slug: magic/soulcastify
+  repository: magic/soulcastify

@@ -6,5 +6,7 @@ class CreateProducts < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
+
+    create_join_table :products, :users
   end
 end

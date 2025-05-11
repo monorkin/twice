@@ -1,0 +1,16 @@
+services:
+  registry:
+    image: registry:2
+    network_mode: host
+    # ports:
+    #   - 5000:5000
+    environment:
+      - REGISTRY_AUTH=token
+      - REGISTRY_AUTH_TOKEN_REALM=http://localhost:3000/registry/auth
+      - REGISTRY_AUTH_TOKEN_SERVICE=registry
+      - REGISTRY_AUTH_TOKEN_ISSUER=registry-auth
+      - REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE=/certs/auth.pem
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+    volumes:
+      - ./registry/tmp/registry_data:/var/lib/registry
+      - ./registry/certs:/certs:ro

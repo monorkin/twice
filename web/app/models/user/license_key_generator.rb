@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Customer::LicenseKeyGenerator
+module User::LicenseKeyGenerator
   KEY_LENGTH = 16
 
   extend ActiveSupport::Concern
@@ -12,7 +12,7 @@ module Customer::LicenseKeyGenerator
   def generate_license_key(length: KEY_LENGTH)
     loop do
       self.key = SecureRandom.base36(length).scan(/.{1,4}/).join("-")
-      break unless License.exists?(key: key)
+      break unless User.exists?(license_key: key)
     end
   end
 end

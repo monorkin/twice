@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CERT_DIR="registry/certs"
+WEB_CERT_DIR="web/storage"
+AUTH_KEY="$CERT_DIR/auth.key"
+AUTH_CERT="$CERT_DIR/auth.crt"
+AUTH_PEM="$CERT_DIR/auth.pem"
+
+mkdir -p "$CERT_DIR"
+mkdir -p "$WEB_CERT_DIR"
+
+# Generate self-signed CA certificate and private key (CA:TRUE + SAN)
+if [[ ! -f "$AUTH_CERT" || ! -f "$AUTH_KEY" ]]; then
+  echo "Generating self-signed CA certificate for JWT signing"
+  openssl req -x509 -newkey rsa:4096 -nodes \
+    -keyout "$AUTH_KEY" \
+    -out "$AUTH_CERT" \
+    -days 365 \
+    -subj "/CN=registry-auth" \
+    -addext "basicConstraints=critical,CA:true" \
+    -addext "keyUsage=keyCertSign,digitalSignature" \
+    -addext "subjectAltName=DNS:registry-auth"
+else
+  echo "Auth certificate already exists"
+fi
+
+# Create .pem version for Docker Registry compatibility
+cp "$AUTH_CERT" "$AUTH_PEM"
+
+# Copy certs to the web app for JWT signing
+echo "Copying certs to web app"
+cp "$AUTH_CERT" "$WEB_CERT_DIR/docker_registry.crt"
+cp "$AUTH_KEY" "$WEB_CERT_DIR/docker_registry.key"
+
+echo "✅ Done: self-signed CA cert generated with SAN, CA:TRUE, and ready for Docker Registry + signing"

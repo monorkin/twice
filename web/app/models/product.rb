@@ -3,10 +3,9 @@
 class Product < ApplicationRecord
   include RepositoryValidations
 
-  has_many :licenses, dependent: :destroy
-  has_many :customers, through: :licenses
+  has_and_belongs_to_many :users
 
-  normalize :repository, with: -> { it.strip.downcase }
+  normalizes :repository, with: -> { it.strip.downcase }
 
   validates :name, presence: true
   validates :repository, uniqueness: true
