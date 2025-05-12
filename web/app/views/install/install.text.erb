@@ -14,7 +14,7 @@ sudo chmod +x /usr/local/bin/twice
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Don't use sudo on macOS; Docker Desktop is likely to be running as the user
-  /usr/local/bin/twice setup <%= @license.formatted_key %>
+  /usr/local/bin/twice setup <%= @user.license_key %>
 else
-  sudo /usr/local/bin/twice setup <%= @license.formatted_key %>
+  sudo /usr/local/bin/twice setup <%= @user.license_key %>
 fi
