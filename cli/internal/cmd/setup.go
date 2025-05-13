@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/monorkin/twice/cli/internal/api"
 	"github.com/monorkin/twice/cli/internal/docker"
 	"github.com/spf13/cobra"
 )
@@ -29,8 +30,6 @@ func NewSetupCmd() *cobra.Command {
 }
 
 func runSetupCmd(licenseKey string) {
-	registry := "localhost:5000"
-
 	// Step 1 - Check if docker is installed
 	if docker.IsInstalled() {
 		println(CheckMarkIcon + " Docker is installed")
@@ -62,17 +61,31 @@ func runSetupCmd(licenseKey string) {
 	}
 
 	// Step 3 - Check the license
-	println("Checking license...")
-
-	// Step 4 - Login with the registry
-	println("Downloading app...")
-	identityToken, err := docker.LoginWithRegistry(registry, "username", licenseKey)
+	apiClient := api.NewClient("localhost:3000")
+	license, err := apiClient.InspectLicense(licenseKey)
 	if err != nil {
+		println(CrossIcon + " License is not valid")
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
-	err = docker.PullImageWithIdentityToken("twice", registry, identityToken, true)
+
+	println(CheckMarkIcon + " License is valid")
+	fmt.Printf("   ├──License key: %s\n", license.Key)
+	fmt.Printf("   ├──License owner: %s\n", license.Owner.EmailAddress)
+	fmt.Printf("   └──Product: %s\n", license.Product.Name)
+	// fmt.Printf("   Repository: %s\n", license.Product.Repository)
+	// fmt.Printf("   Registry: %s\n", license.Product.Registry)
+
+	// Step 4 - Download the app image
+	err = docker.PullImageWithIdentityToken(
+		license.Product.Repository,
+		license.Product.Registry,
+		license.Owner.EmailAddress,
+		licenseKey,
+		false,
+	)
 	if err != nil {
+		println(CrossIcon + " App download failed")
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}

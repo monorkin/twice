@@ -2,7 +2,6 @@ package docker
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	registryTypes "github.com/docker/docker/api/types/registry"
@@ -26,10 +25,6 @@ func LoginWithRegistry(registry string, username string, password string) (strin
 	resp, err := dockerClient.RegistryLogin(ctx, authConfig)
 	if err != nil {
 		return "", fmt.Errorf("failed to login to registry: %v", err)
-	}
-
-	if resp.IdentityToken == "" {
-		return "", errors.New("identity token is empty")
 	}
 
 	return resp.IdentityToken, nil

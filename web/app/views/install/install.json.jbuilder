@@ -1,3 +1,5 @@
+json.key @license.key
+
 json.owner do
   json.(@license.owner, :id, :email_address)
 end

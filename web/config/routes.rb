@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   match "/registry/auth", to: "registry#auth", as: :registry_auth, via: %i[ get post ]
 
-  get "/install/:license_key", to: "install#install", as: :install, defaults: { format: "text" }
+  get "/install/:license_key", to: "install#install", as: :install
   get "/install/:license_key/download", to: "install#download", as: :install_download
 
   post "webhooks/order/created", to: "webhooks#order_created", as: :order_created_webhook

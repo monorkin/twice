@@ -7,6 +7,10 @@ class InstallController < ApplicationController
   rate_limit to: 30, within: 1.minute, if: -> { @license.present? }
 
   def install
+    respond_to do |format|
+      format.text
+      format.json
+    end
   end
 
   def download
@@ -26,7 +30,7 @@ class InstallController < ApplicationController
   private
 
     def set_license
-      @user = License.find_by_key!(params[:license_key])
+      @license = License.find_by_key!(params[:license_key])
     end
 
     def sanitize_file_name_part(value)

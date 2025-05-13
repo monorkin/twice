@@ -9,10 +9,9 @@ import (
 type Client struct {
 	HTTPClient *http.Client
 	BaseURL    string
-	LicenseKey string
 }
 
-func NewClient(baseURL string, licenseKey string) *Client {
+func NewClient(baseURL string) *Client {
 	if !strings.HasPrefix(baseURL, "https://") && !strings.HasPrefix(baseURL, "http://") {
 		if strings.HasPrefix(baseURL, "localhost") {
 			baseURL = "http://" + baseURL
@@ -22,8 +21,7 @@ func NewClient(baseURL string, licenseKey string) *Client {
 	}
 
 	return &Client{
-		BaseURL:    baseURL,
-		LicenseKey: licenseKey,
+		BaseURL: baseURL,
 		HTTPClient: &http.Client{
 			Timeout: 5 * time.Second,
 		},

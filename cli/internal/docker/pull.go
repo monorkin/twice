@@ -2,6 +2,8 @@ package docker
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -11,10 +13,13 @@ import (
 	"github.com/docker/docker/client"
 )
 
-func PullImageWithIdentityToken(image string, registry string, identityToken string, printProgress bool) error {
-	// The image has to include the name of the registry as a prefix
+func PullImageWithIdentityToken(image string, registry string, username string, password string, printProgress bool) error {
 	if !strings.HasPrefix(image, registry) {
 		image = fmt.Sprintf("%s/%s", registry, image)
+	}
+
+	if !strings.Contains(image, ":") {
+		image = fmt.Sprintf("%s:latest", image)
 	}
 
 	ctx := context.Background()
@@ -24,8 +29,19 @@ func PullImageWithIdentityToken(image string, registry string, identityToken str
 	}
 	defer dockerClient.Close()
 
+	authJSON := map[string]string{
+		"username":      username,
+		"password":      password,
+		"serveraddress": registry,
+	}
+	authBytes, err := json.Marshal(authJSON)
+	if err != nil {
+		return fmt.Errorf("failed to marshal auth: %v", err)
+	}
+	authBase64 := base64.StdEncoding.EncodeToString(authBytes)
+
 	options := imageTypes.PullOptions{
-		RegistryAuth: identityToken,
+		RegistryAuth: authBase64,
 	}
 
 	responseBody, err := dockerClient.ImagePull(ctx, image, options)
