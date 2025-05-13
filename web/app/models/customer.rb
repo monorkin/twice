@@ -4,9 +4,7 @@ class Customer < User
   before_validation :generate_password, on: :create
 
   def purchase(product)
-    unless self.products.exists?(product)
-      self.products << product
-    end
+    self.licenses.create!(product: product)
   end
 
   def generate_password

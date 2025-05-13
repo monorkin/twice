@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-module User::LicenseKeyGenerator
+module License::KeyGenerator
   KEY_LENGTH = 16
 
   extend ActiveSupport::Concern
 
   included do
-    before_validation :generate_license_key
+    before_validation :generate_key
   end
 
-  def generate_license_key(length: KEY_LENGTH)
+  def generate_key(length: KEY_LENGTH)
     loop do
       self.key = SecureRandom.base36(length).scan(/.{1,4}/).join("-")
-      break unless User.exists?(license_key: key)
+      break unless self.class.exists?(key: key)
     end
   end
 end

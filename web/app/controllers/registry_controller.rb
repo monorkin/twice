@@ -1,30 +1,33 @@
 # frozen_string_literal: true
 
 class RegistryController < ApplicationController
-  TOKEN_DURATION = 5.minutes
-
   allow_unauthenticated_access
 
-  # /registry/auth
+  # GET|POST /registry/auth
   def auth
     authenticate_or_request_with_http_basic do |email, license_key|
       user = User.find_by(email_address: email)
+      deny_access and return if user.blank?
 
-      if user&.authenticate_registry_access(license_key)
-        token = user.generate_registry_access_token(duration: TOKEN_DURATION, service: params[:service])
-        payload = {
-          token: token.to_s,
-          expires_in: TOKEN_DURATION.to_i,
-          issued_at: Time.now.utc.iso8601
-        }
+      license = user.licenses.find_by_key(license_key)
 
-        Rails.logger.info token.payload.inspect
-        Rails.logger.info payload.inspect
-
-        render(json: payload, status: :ok)
-      else
-        deny_access
+      token = if license.present?
+        user.registry_access_token_to_product(license.product, service: params[:service])
+      elsif user.is_a?(Developer) && user.authenticate(license_key)
+        user.registry_token_for_scope(scope: params[:scope], service: params[:service])
       end
+
+      Rails.logger.info "Registry token: #{token.payload.inspect}"
+
+      deny_access and return if token.blank?
+
+      payload = {
+        token: token.to_s,
+        expires_in: token.duration.to_i,
+        issued_at: Time.now.utc.iso8601
+      }
+
+      render(json: payload, status: :ok)
     end
   end
 

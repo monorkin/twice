@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/monorkin/twice/cli/cmd/setup"
+	"github.com/monorkin/twice/cli/internal/cmd"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		Long:  `A command line interface for the Twice distribution system.`,
 	}
 
-	rootCmd.AddCommand(setup.NewCmd())
+	rootCmd.AddCommand(cmd.NewSetupCmd())
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

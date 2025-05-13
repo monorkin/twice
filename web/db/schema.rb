@@ -11,17 +11,23 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2025_05_11_092359) do
+  create_table "licenses", force: :cascade do |t|
+    t.string "key", null: false
+    t.integer "product_id", null: false
+    t.integer "owner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_licenses_on_key", unique: true
+    t.index ["owner_id"], name: "index_licenses_on_owner_id"
+    t.index ["product_id"], name: "index_licenses_on_product_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name", null: false
     t.string "repository", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["repository"], name: "index_products_on_repository", unique: true
-  end
-
-  create_table "products_users", id: false, force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "user_id", null: false
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -36,14 +42,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_11_092359) do
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
-    t.string "license_key", null: false
     t.string "type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
-    t.index ["license_key"], name: "index_users_on_license_key", unique: true
     t.index ["type"], name: "index_users_on_type"
   end
 
+  add_foreign_key "licenses", "users", column: "owner_id"
   add_foreign_key "sessions", "users"
 end

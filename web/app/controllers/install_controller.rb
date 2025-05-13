@@ -2,8 +2,9 @@
 
 class InstallController < ApplicationController
   allow_unauthenticated_access
-  rate_limit to: 10, within: 1.minute
-  before_action :set_user
+  before_action :set_license
+  rate_limit to: 5, within: 1.minute, if: -> { @license.blank? }
+  rate_limit to: 30, within: 1.minute, if: -> { @license.present? }
 
   def install
   end
@@ -22,16 +23,10 @@ class InstallController < ApplicationController
     end
   end
 
-  def products
-    products = @user.products
-    products = Product.all if @user.is_a?(Developer)
-    set_page_and_extract_portion_from products, ordered_by: { name: :asc, id: :desc }
-  end
-
   private
 
-    def set_user
-      @user = User.find_by_license_key!(params[:license_key])
+    def set_license
+      @user = License.find_by_key!(params[:license_key])
     end
 
     def sanitize_file_name_part(value)

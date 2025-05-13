@@ -8,16 +8,8 @@ module User::DockerRegistryAuth
 
   DEFAULT_TOKEN_DURATION = 5.minutes
 
-  def authenticate_registry_access(license_key)
-    ActiveSupport::SecurityUtils.fixed_length_secure_compare(license_key, self.license_key)
-  end
-
-  def generate_registry_access_token(duration: DEFAULT_TOKEN_DURATION, service: nil)
-    access_requests = if is_a?(Developer)
-      DockerRegistry::AccessRequest.full_access
-    else
-      DockerRegistry::AccessRequest.pull_access_to_repositories(products.pluck(:repository))
-    end
+  def full_access_registry_token(duration: DEFAULT_TOKEN_DURATION, service: nil)
+    access_requests = DockerRegistry::AccessRequest.full_access_to_registry
 
     DockerRegistry::Token.new(
       id: id,
@@ -25,6 +17,30 @@ module User::DockerRegistryAuth
       service: service,
       duration: duration,
       access_requests: access_requests
+    )
+  end
+
+  def registry_token_for_scope(scope:, duration: DEFAULT_TOKEN_DURATION, service: nil)
+    access_requests = DockerRegistry::AccessRequest.parse(scope)
+
+    DockerRegistry::Token.new(
+      id: id,
+      email: email_address,
+      service: service,
+      duration: duration,
+      access_requests: access_requests
+    )
+  end
+
+  def registry_access_token_to_product(product = nil, duration: DEFAULT_TOKEN_DURATION, service: nil)
+    access_request = DockerRegistry::AccessRequest.pull_access_to_repository(product.repository)
+
+    DockerRegistry::Token.new(
+      id: id,
+      email: email_address,
+      service: service,
+      duration: duration,
+      access_requests: [access_request]
     )
   end
 end

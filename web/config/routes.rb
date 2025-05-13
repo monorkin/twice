@@ -7,7 +7,6 @@ Rails.application.routes.draw do
 
   get "/install/:license_key", to: "install#install", as: :install, defaults: { format: "text" }
   get "/install/:license_key/download", to: "install#download", as: :install_download
-  get "/install/:license_key/products", to: "install#products", as: :install_products, defaults: { format: "json" }
 
   post "webhooks/order/created", to: "webhooks#order_created", as: :order_created_webhook
 end

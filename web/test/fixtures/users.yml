@@ -6,22 +6,16 @@ kaladin:
   type: Customer
   email_address: kaladin.stormblessed@example.com
   password_digest: <%= password_digest %>
-  license_key: nx1w-qg52-e5t3-kpa4
-  products: sphere_sorter
 
 shallan:
   type: Customer
   email_address: shallan.davar@example.com
   password_digest: <%= password_digest %>
-  license_key: keqe-lsd8-n8ji-brh3
-  products: soulcastify
 
 dalinar:
   type: Customer
   email_address: dalinar.kholin@example.com
   password_digest: <%= password_digest %>
-  license_key: xsba-0eft-kvir-n3wu
-  products: shardplate_polisher, soulcastify
 
 # Developers
 
@@ -29,10 +23,8 @@ jezrien:
   type: Developer
   email_address: jezrien@example.com
   password_digest: <%= password_digest %>
-  license_key: gi68-15nt-pqsb-coen
 
 ishar:
   type: Developer
   email_address: ishar@example.com
   password_digest: <%= password_digest %>
-  license_key: an6s-c5m7-n585-fj2p

@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+class License < ApplicationRecord
+  include KeyGenerator
+
+  belongs_to :owner, class_name: "User"
+  belongs_to :product
+
+  validates :key, presence: true, uniqueness: true
+end
