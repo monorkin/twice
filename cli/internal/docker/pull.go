@@ -7,20 +7,13 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 
 	imageTypes "github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 )
 
 func PullImageWithIdentityToken(image string, registry string, username string, password string, printProgress bool) error {
-	if !strings.HasPrefix(image, registry) {
-		image = fmt.Sprintf("%s/%s", registry, image)
-	}
-
-	if !strings.Contains(image, ":") {
-		image = fmt.Sprintf("%s:latest", image)
-	}
+	image = SanitizeImageName(image, registry)
 
 	ctx := context.Background()
 	dockerClient, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())

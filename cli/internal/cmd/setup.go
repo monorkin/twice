@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/monorkin/twice/cli/internal/api"
 	"github.com/monorkin/twice/cli/internal/docker"
@@ -91,6 +93,46 @@ func runSetupCmd(licenseKey string) {
 	}
 	println(CheckMarkIcon + " App downloaded")
 
-	// Step 5 - Run the app
-	err = docker.RunApp(license.Product.Repository, license.Product.Registry)
+	// Step 5 - Configuration
+	reader := bufio.NewReader(os.Stdin)
+
+	domain := ""
+	enableHTTPS := false
+
+	for {
+		fmt.Print("Enter the domain (e.g. example.com) where you'll run the app: ")
+		domain, _ := reader.ReadString('\n')
+		domain = strings.TrimSpace(domain)
+
+		fmt.Print("Do you want to enable HTTPS? (yes/NO): ")
+		httpsAnswer, _ := reader.ReadString('\n')
+		httpsAnswer = strings.TrimSpace(strings.ToLower(httpsAnswer))
+		enableHTTPS := httpsAnswer == "yes" || httpsAnswer == "y"
+
+		fmt.Printf("   ├──Domain: %s\n", domain)
+		fmt.Printf("   └──HTTPS: %t\n", enableHTTPS)
+
+		fmt.Print("Is this correct? (yes/NO): ")
+		answer, _ := reader.ReadString('\n')
+		correct := strings.TrimSpace(strings.ToLower(answer))
+		if correct == "yes" || correct == "y" {
+			break
+		}
+	}
+
+	// Step 6 - Run the app
+	err = docker.RunApp(
+		license.Product.Repository,
+		license.Product.Registry,
+		license.Owner.EmailAddress,
+		domain,
+		enableHTTPS,
+	)
+	if err != nil {
+		println(CrossIcon + " App run failed")
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+
+	println(CheckMarkIcon + " App is running")
 }

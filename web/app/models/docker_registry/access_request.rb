@@ -13,6 +13,8 @@ class DockerRegistry::AccessRequest < Data.define(:type, :name, :actions)
   end
 
   def self.parse(scope)
+    return [] if scope.blank?
+
     scope.split("&").map do |part|
       type, name, actions = part.split(":", 3)
       actions = actions.split(",") if actions
