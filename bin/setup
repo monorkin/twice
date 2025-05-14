@@ -2,7 +2,7 @@
 set -euo pipefail
 
 CERT_DIR="registry/certs"
-WEB_CERT_DIR="web/storage"
+WEB_CERT_DIR="auth/storage"
 AUTH_KEY="$CERT_DIR/auth.key"
 AUTH_CERT="$CERT_DIR/auth.crt"
 AUTH_PEM="$CERT_DIR/auth.pem"
