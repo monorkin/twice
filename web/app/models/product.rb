@@ -2,6 +2,7 @@
 
 class Product < ApplicationRecord
   include RepositoryValidations
+  include Search
 
   has_many :licenses, dependent: :destroy
 

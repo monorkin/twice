@@ -4,7 +4,9 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update destroy]
 
   def index
-    set_page_and_extract_portion_from Product.all, ordered_by: { name: :asc, id: :desc }
+    products = Product.all
+    products = products.search(params[:search][:query]) if params.dig(:search, :query).present?
+    set_page_and_extract_portion_from products, ordered_by: { name: :asc, id: :desc }
   end
 
   def show
