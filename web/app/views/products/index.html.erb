@@ -10,7 +10,7 @@
 
   <div class="flex flex-row justify-between items-center justify-center mb-4">
     <% unless @page.last? %>
-      <%= link_to "Show more", products_path(page: @page.next_param), data: { pagination_target: "nextPageLink", action: "pagination#loadNextPage" } %>
+      <%= link_to "Show more", products_path(page: @page.next_param), class: "p-2 border border-black rounded", data: { pagination_target: "nextPageLink", action: "pagination#loadNextPage" } %>
     <% end %>
   </div>
 </div>
