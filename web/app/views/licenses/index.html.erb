@@ -5,18 +5,20 @@
   </div>
 
   <%= turbo_frame_tag "licenses", target: :_top do %>
-    <div class="flex flex-col">
-      <% if @page.records.empty? %>
-        <span class="text-gray-400">No licenses</span>
-      <% else %>
-        <%= render @page.records %>
-      <% end %>
-    </div>
+    <div data-controller="pagination">
+      <div class="flex flex-col" data-pagination-target="list">
+        <% if @page.records.empty? %>
+          <span class="text-gray-400">No licenses</span>
+        <% else %>
+          <%= render @page.records %>
+        <% end %>
+      </div>
 
-    <div class="flex flex-row justify-between items-center justify-center">
-      <% unless @page.last? %>
-        <%= link_to "Show more", customer_licenses_path(customer_id: @customer, page: @page.next_param), class: "p-2 border border-black rounded" %>
-      <% end %>
+      <div class="flex flex-row justify-between items-center justify-center p-4">
+        <% unless @page.last? %>
+          <%= link_to "Show more", customer_licenses_path(customer_id: @customer, page: @page.next_param), class: "p-2 border border-black rounded", data: { pagination_target: "nextPageLink", action: "pagination#loadNextPage" } %>
+        <% end %>
+      </div>
     </div>
   <% end %>
 </div>
