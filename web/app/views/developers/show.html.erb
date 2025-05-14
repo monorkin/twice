@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-6 w-full">
+  <div class="flex flex-row justify-between items-center gap-4">
+    <h1 class="font-semibold text-2xl flex-grow"><%= @developer.email_address %></h1>
+    <%= link_to "Edit Developer", edit_developer_path(@developer), class: "p-2 border border-black rounded" %>
+    <%= button_to "Delete", developer_path(@developer), method: :delete, class: "p-2 bg-black text-white rounded cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+  </div>
+
+  <dl>
+    <dt class="font-semibold">Email Address</dt>
+    <dd class="mb-4"><%= @developer.email_address %></dd>
+
+    <dt class="font-semibold">Created at</dt>
+    <dd class="mb-4"><%= l @developer.created_at %></dd>
+
+    <dt class="font-semibold">Updated at</dt>
+    <dd class="mb-4"><%= l @developer.updated_at %></dd>
+  </dl>
+</div>

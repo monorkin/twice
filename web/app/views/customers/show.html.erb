@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-6 w-full">
+  <div class="flex flex-row justify-between items-center gap-4">
+    <h1 class="font-semibold text-2xl flex-grow"><%= @customer.email_address %></h1>
+    <%= link_to "Edit Customer", edit_customer_path(@customer), class: "p-2 border border-black rounded" %>
+    <%= button_to "Delete", customer_path(@customer), method: :delete, class: "p-2 bg-black text-white rounded cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+  </div>
+
+  <dl>
+    <dt class="font-semibold">Email Address</dt>
+    <dd class="mb-4"><%= @customer.email_address %></dd>
+
+    <dt class="font-semibold">Created at</dt>
+    <dd class="mb-4"><%= l @customer.created_at %></dd>
+
+    <dt class="font-semibold">Updated at</dt>
+    <dd class="mb-4"><%= l @customer.updated_at %></dd>
+  </dl>
+
+  <div class="flex flex-col justify-between gap-4">
+    <div class="flex flex-row justify-between items-center gap-4">
+      <h2 class="font-semibold text-2xl flex-grow">Licenses</h2>
+      <%= link_to "Purchase", new_customer_license_path(customer_id: @customer), class: "p-2 border border-black rounded" %>
+    </div>
+
+    <%= turbo_frame_tag "licenses", src: customer_licenses_path(customer_id: @customer), loading: :lazy do %>
+      <span class="animate-pulse">Fetching products...</span>
+    <% end %>
+  </div>
+</div>

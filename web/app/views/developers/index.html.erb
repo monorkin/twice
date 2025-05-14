@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-6 w-full">
+  <div class="flex flex-row justify-between items-center">
+    <h1 class="font-semibold text-2xl">Developers</h1>
+    <%= link_to "New Developer", new_developer_path, class: "p-2 border border-black rounded" %>
+  </div>
+
+  <div class="flex flex-col">
+    <%= render @page.records %>
+  </div>
+
+  <div class="flex flex-row justify-between items-center justify-center">
+    <%= link_to_unless @page.last?, "Show more", developers_path(page: @page.next_param) do %>
+      <span class="text-gray-400">That's all<span>
+    <% end %>
+  </div>
+</div>

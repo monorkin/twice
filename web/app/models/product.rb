@@ -3,7 +3,7 @@
 class Product < ApplicationRecord
   include RepositoryValidations
 
-  has_and_belongs_to_many :users
+  has_many :licenses, dependent: :destroy
 
   normalizes :repository, with: -> { it.strip.downcase }
 

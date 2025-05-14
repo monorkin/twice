@@ -1,0 +1,27 @@
+<%= form_for product, html: { class: "flex flex-col gap-6" } do |form| %>
+  <div class="flex flex-col gap-6">
+    <div>
+      <%= form.label :name, class: "font-semibold" %>
+      <%= form.text_field :name, class: "border border-gray-400 rounded p-2 w-full", placeholder: "My widget" %>
+      <% if form.object.errors[:name].any? %>
+        <div class="text-red-500">
+          <%= form.object.errors[:name].join(", ") %>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= form.label :repository, class: "font-semibold" %>
+      <%= form.text_field :repository, class: "border border-gray-400 rounded p-2 w-full", placeholder: "my-company/my-widget" %>
+      <% if form.object.errors[:repository].any? %>
+        <div class="text-red-500">
+          <%= form.object.errors[:repository].join(", ") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flex flex-row justify-end">
+    <%= form.submit "Save", class: "p-2 bg-black text-white rounded cursor-pointer" %>
+  </div>
+<% end %>

@@ -10,6 +10,8 @@ module Product::RepositoryValidations
   end
 
   def validate_repository_format
+    repository = self.repository
+
     if repository.blank?
       errors.add(:repository, "can't be blank")
       return
@@ -24,7 +26,7 @@ module Product::RepositoryValidations
       errors.add(:repository, "is too long (maximum is 255 characters)")
     end
 
-    if repository.match?(/-+|\.+|_+/)
+    if repository.match?(/-{2,}|\.{2,}|_{2,}/)
       errors.add(:repository, "can't contain consecutive dashes, dots, or underscores")
     end
 
@@ -35,7 +37,7 @@ module Product::RepositoryValidations
     if parts.count == 1
       namespace = nil
       name = parts.first
-    elseif parts.count == 2
+    elsif parts.count == 2
       namespace, name = parts
     else
       errors.add(:repository, "can't contain more than one slash")

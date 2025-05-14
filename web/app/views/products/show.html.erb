@@ -1,0 +1,24 @@
+<div class="flex flex-col gap-6 w-full">
+  <div class="flex flex-row justify-between items-center gap-4">
+    <h1 class="font-semibold text-2xl flex-grow"><%= @product.name %></h1>
+    <%= link_to "Edit Product", edit_product_path(@product), class: "p-2 border border-black rounded" %>
+    <%= button_to "Delete", product_path(@product), method: :delete, class: "p-2 bg-black text-white rounded cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+  </div>
+
+  <dl>
+    <dt class="font-semibold">Name</dt>
+    <dd class="mb-4"><%= @product.name %></dd>
+
+    <dt class="font-semibold">Repository</dt>
+    <dd class="mb-4"><%= @product.repository %></dd>
+
+    <dt class="font-semibold">Licenses sold</dt>
+    <dd class="mb-4"><%= @product.licenses.count %></dd>
+
+    <dt class="font-semibold">Created at</dt>
+    <dd class="mb-4"><%= l @product.created_at %></dd>
+
+    <dt class="font-semibold">Updated at</dt>
+    <dd class="mb-4"><%= l @product.updated_at %></dd>
+  </dl>
+</div>

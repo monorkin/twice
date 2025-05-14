@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-6 w-full">
+  <div class="flex flex-row justify-between items-center">
+    <h1 class="font-semibold text-2xl">Purchase License</h1>
+    <%= link_to "Back to customer", customer_path(@license.owner), class: "p-2 border border-black rounded" %>
+  </div>
+
+  <div>
+    <%= form_for [@license.owner, @license], html: { class: "flex flex-col gap-6" } do |form| %>
+      <dl>
+        <dt class="font-semibold">Owner</dt>
+        <dd><%= @license.owner.email_address %></dd>
+      </dl>
+
+      <div>
+        <%= form.label :product_id, class: "font-semibold" %>
+        <%= form.select :product_id, Product.all.map { |product| [product.name, product.id] }, { include_blank: "- Pick a product -" }, class: "border border-gray-400 rounded p-2 w-full" %>
+        <% if form.object.errors[:product_id].any? %>
+          <div class="text-red-500">
+            <%= form.object.errors[:product_id].join(", ") %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="flex flex-row justify-end">
+        <%= form.submit "Purchase", class: "p-2 bg-black text-white rounded cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+</div>

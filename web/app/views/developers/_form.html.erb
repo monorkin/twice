@@ -1,0 +1,39 @@
+<%= form_for developer, html: { class: "flex flex-col gap-6" } do |form| %>
+  <div class="flex flex-col gap-6">
+    <div>
+      <%= form.label :email_address, class: "font-semibold" %>
+      <%= form.email_field :email_address, class: "border border-gray-400 rounded p-2 w-full", placeholder: "nemo@example.com" %>
+      <% if form.object.errors[:email_address].any? %>
+        <div class="text-red-500">
+          <%= form.object.errors[:email_address].join(", ") %>
+        </div>
+      <% end %>
+    </div>
+
+
+    <div class="flex flex-col gap-4">
+      <div>
+        <%= form.label :password, class: "font-semibold" %>
+        <%= form.password_field :password, class: "border border-gray-400 rounded p-2 w-full", placeholder: "nemo@example.com" %>
+        <% if form.object.errors[:password].any? %>
+          <div class="text-red-500">
+            <%= form.object.errors[:password].join(", ") %>
+          </div>
+        <% end %>
+      </div>
+      <div>
+        <%= form.label :password_confirmation, class: "font-semibold" %>
+        <%= form.password_field :password_confirmation, class: "border border-gray-400 rounded p-2 w-full", placeholder: "nemo@example.com" %>
+        <% if form.object.errors[:password_confirmation].any? %>
+          <div class="text-red-500">
+            <%= form.object.errors[:password_confirmation].join(", ") %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row justify-end">
+    <%= form.submit "Save", class: "p-2 bg-black text-white rounded cursor-pointer" %>
+  </div>
+<% end %>

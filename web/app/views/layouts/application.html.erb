@@ -23,6 +23,17 @@
   </head>
 
   <body>
+    <nav class="flex flex-row justify-between items-center bg-black text-white p-4 gap-6">
+      <div class="inline-flex flex-row items-center gap-4">
+        <h1 class="font-bold select-none">Twice</h1>
+      </div>
+      <div class="inline-flex flex-row items-center gap-4">
+        <%= link_to "Customers", customers_path %>
+        <%= link_to "Developers", developers_path %>
+        <%= link_to "Products", products_path %>
+      </div>
+    </nav>
+
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>

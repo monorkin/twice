@@ -1,0 +1,22 @@
+<div class="flex flex-col gap-6 w-full">
+  <div class="flex flex-row justify-between items-center">
+    <h1 class="font-semibold text-2xl">Licenses</h1>
+    <%= link_to "New License", new_customer_license_path(customer_id: @customer), class: "p-2 bg-blue-500 text-white rounded" %>
+  </div>
+
+  <%= turbo_frame_tag "licenses", target: :_top do %>
+    <div class="flex flex-col">
+      <% if @page.records.empty? %>
+        <span class="text-gray-400">No licenses</span>
+      <% else %>
+        <%= render @page.records %>
+      <% end %>
+    </div>
+
+    <div class="flex flex-row justify-between items-center justify-center">
+      <% unless @page.last? %>
+        <%= link_to "Show more", customer_licenses_path(customer_id: @customer, page: @page.next_param), class: "p-2 border border-black rounded" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
