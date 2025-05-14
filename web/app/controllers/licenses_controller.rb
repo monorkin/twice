@@ -5,7 +5,9 @@ class LicensesController < ApplicationController
   before_action :set_license, only: %i[destroy]
 
   def index
-    set_page_and_extract_portion_from @customer.licenses, ordered_by: { product_id: :asc, key: :asc }
+    licenses = @customer.licenses
+    licenses = licenses.search(params[:search][:query]) if params.dig(:search, :query).present?
+    set_page_and_extract_portion_from licenses, ordered_by: { product_id: :asc, key: :asc }
   end
 
   def new

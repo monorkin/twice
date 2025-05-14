@@ -6,6 +6,11 @@
 
   <%= turbo_frame_tag "licenses", target: :_top do %>
     <div data-controller="pagination">
+      <%= form_for :search, method: :get, html: { class: "flex flex-row gap-2 mb-4 w-full" } do |f| %>
+        <%= f.text_field :query, value: params.dig(:search, :query), placeholder: "Search by license key or product name", class: "border border-gray-500 rounded p-2 flex-grow" %>
+        <%= f.submit "Search", class: "p-2 bg-black text-white rounded" %>
+      <% end %>
+
       <div class="flex flex-col" data-pagination-target="list">
         <% if @page.records.empty? %>
           <span class="text-gray-400">No licenses</span>
