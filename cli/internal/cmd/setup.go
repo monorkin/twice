@@ -90,4 +90,7 @@ func runSetupCmd(licenseKey string) {
 		return
 	}
 	println(CheckMarkIcon + " App downloaded")
+
+	// Step 5 - Run the app
+	err = docker.RunApp(license.Product.Repository, license.Product.Registry)
 }

@@ -21,6 +21,10 @@ module User::DockerRegistryAuth
   end
 
   def registry_token_for_scope(scope:, duration: DEFAULT_TOKEN_DURATION, service: nil)
+    if scope.blank? && is_a?(Developer)
+      return full_access_registry_token(duration: duration, service: service)
+    end
+
     access_requests = DockerRegistry::AccessRequest.parse(scope)
 
     DockerRegistry::Token.new(
