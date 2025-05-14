@@ -4,7 +4,9 @@ class DevelopersController < ApplicationController
   before_action :set_developer, only: %i[show edit update destroy]
 
   def index
-    set_page_and_extract_portion_from Developer.all, ordered_by: { email_address: :asc, id: :desc }
+    developers = Developer.all
+    developers = developers.search(params[:search][:query]) if params.dig(:search, :query).present?
+    set_page_and_extract_portion_from developers, ordered_by: { email_address: :asc, id: :desc }
   end
 
   def show

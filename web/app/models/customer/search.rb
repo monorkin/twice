@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module License::Search
+module Customer::Search
   extend ActiveSupport::Concern
 
   class_methods do
@@ -8,7 +8,7 @@ module License::Search
       return all if query.blank?
 
       query = query.strip.downcase
-      left_joins(:product).where("key LIKE :query OR products.name LIKE :query", query: "%#{query}%")
+      left_joins(:licenses).distinct.where("email_address LIKE :query OR licenses.key LIKE :query", query: "%#{query}%")
     end
   end
 end

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Customer < User
+  include Search
+
   before_validation :generate_password, on: :create
 
   def purchase(product)

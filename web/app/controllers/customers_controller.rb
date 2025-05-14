@@ -4,7 +4,9 @@ class CustomersController < ApplicationController
   before_action :set_customer, only: %i[show edit update destroy]
 
   def index
-    set_page_and_extract_portion_from Customer.all, ordered_by: { email_address: :asc, id: :desc }
+    customers = Customer.all
+    customers = customers.search(params[:search][:query]) if params.dig(:search, :query).present?
+    set_page_and_extract_portion_from customers, ordered_by: { email_address: :asc, id: :desc }
   end
 
   def show

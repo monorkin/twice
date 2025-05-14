@@ -4,6 +4,11 @@
     <%= link_to "New Developer", new_developer_path, class: "p-2 border border-black rounded" %>
   </div>
 
+  <%= form_for :search, method: :get, html: { class: "flex flex-row gap-2 mb-4 w-full" } do |f| %>
+    <%= f.text_field :query, value: params.dig(:search, :query), placeholder: "Search by email", class: "border border-gray-500 rounded p-2 flex-grow" %>
+    <%= f.submit "Search", class: "p-2 bg-black text-white rounded cursor-pointer" %>
+  <% end %>
+
   <div class="flex flex-col" data-pagination-target="list">
     <%= render @page.records %>
   </div>
