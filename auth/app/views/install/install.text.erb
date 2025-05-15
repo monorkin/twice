@@ -7,7 +7,7 @@ echo
 
 sudo true
 
-command_path="<%= url_for %>?arch=$(arch)&platform=$(uname)"
+command_path="<%= install_download_path %>?arch=$(arch)&platform=$(uname)"
 curl -s "$command_path" -o .twice_tmp
 sudo mv .twice_tmp /usr/local/bin/twice
 sudo chmod +x /usr/local/bin/twice

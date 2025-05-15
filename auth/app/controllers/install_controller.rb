@@ -18,6 +18,7 @@ class InstallController < ApplicationController
     arch = sanitize_file_name_part(params[:arch])
 
     filename = ["twice", platform, arch].compact.join("-")
+    Rails.logger.info "Download filename: #{filename}"
     file_path = Pathname.new(Rails.root.join("storage", filename))
 
     if file_path.exist?
@@ -36,6 +37,6 @@ class InstallController < ApplicationController
     def sanitize_file_name_part(value)
       return if value.blank?
 
-      File.basename(value).gsub(/[^a-z0-9_\-]/, "").downcase.presence
+      File.basename(value).gsub(/[^a-z0-9_\-]/i, "").downcase.presence
     end
 end

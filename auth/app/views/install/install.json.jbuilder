@@ -1,3 +1,4 @@
+# vim: set ft=ruby:
 json.key @license.key
 
 json.owner do
