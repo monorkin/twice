@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -49,7 +49,7 @@ func (c *Client) InspectLicense(licenseKey string) (*License, error) {
 		return nil, fmt.Errorf("License inspection returned unexpected status code: %s", response.Status)
 	}
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return nil, errors.Join(errors.New("Couldn't to read license response"), err)
 	}
