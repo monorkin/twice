@@ -8,7 +8,7 @@ module User::DockerRegistryAuth
 
   DEFAULT_TOKEN_DURATION = 5.minutes
 
-  def full_access_registry_token(duration: DEFAULT_TOKEN_DURATION, service: nil)
+  def generate_full_access_registry_token(duration: DEFAULT_TOKEN_DURATION, service: nil)
     access_requests = DockerRegistry::AccessRequest.full_access_to_registry
 
     DockerRegistry::Token.new(
@@ -20,9 +20,9 @@ module User::DockerRegistryAuth
     )
   end
 
-  def registry_token_for_scope(scope:, duration: DEFAULT_TOKEN_DURATION, service: nil)
+  def generate_registry_token_for_scope(scope:, duration: DEFAULT_TOKEN_DURATION, service: nil)
     if scope.blank? && is_a?(Developer)
-      return full_access_registry_token(duration: duration, service: service)
+      return generate_full_access_registry_token(duration: duration, service: service)
     end
 
     access_requests = DockerRegistry::AccessRequest.parse(scope)
@@ -36,7 +36,7 @@ module User::DockerRegistryAuth
     )
   end
 
-  def registry_access_token_to_product(product = nil, duration: DEFAULT_TOKEN_DURATION, service: nil)
+  def generate_registry_access_token_to_product(product = nil, duration: DEFAULT_TOKEN_DURATION, service: nil)
     access_request = DockerRegistry::AccessRequest.pull_access_to_repository(product.repository)
 
     DockerRegistry::Token.new(
@@ -44,8 +44,7 @@ module User::DockerRegistryAuth
       email: email_address,
       service: service,
       duration: duration,
-      access_requests: [access_request]
+      access_requests: [ access_request ]
     )
   end
 end
-

@@ -34,7 +34,7 @@ class DockerRegistry::Token
   end
 
   def headers
-    { kid: KID, x5c: [X5C] }
+    { kid: KID, x5c: [ X5C ] }
   end
 
   def payload
@@ -43,11 +43,15 @@ class DockerRegistry::Token
       sub: email,
       aud: service,
       exp: duration.from_now.to_i,
-      nbf: Time.now.to_i,
-      iat: Time.now.to_i,
+      nbf: issued_at.to_i,
+      iat: issued_at.to_i,
       jti: jti,
       access: access_requests.map(&:to_h)
     }
+  end
+
+  def issued_at
+    Time.now.utc
   end
 
   def jti
@@ -62,4 +66,3 @@ class DockerRegistry::Token
     digest.hexdigest
   end
 end
-

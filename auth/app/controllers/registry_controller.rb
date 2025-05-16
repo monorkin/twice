@@ -12,19 +12,17 @@ class RegistryController < ApplicationController
       license = user.licenses.find_by_key(license_key)
 
       token = if license.present?
-        user.registry_access_token_to_product(license.product, service: params[:service])
+        user.generate_registry_access_token_to_product(license.product, service: params[:service])
       elsif user.is_a?(Developer) && user.authenticate(license_key)
-        user.registry_token_for_scope(scope: params[:scope], service: params[:service])
+        user.generate_registry_token_for_scope(scope: params[:scope], service: params[:service])
       end
-
-      Rails.logger.info "Registry token: #{token.payload.inspect}"
 
       deny_access and return if token.blank?
 
       payload = {
         token: token.to_s,
         expires_in: token.duration.to_i,
-        issued_at: Time.now.utc.iso8601
+        issued_at: token.issued_at.iso8601
       }
 
       render(json: payload, status: :ok)
@@ -42,4 +40,3 @@ class RegistryController < ApplicationController
       )
     end
 end
-
