@@ -74,6 +74,8 @@ the license key from the URL.
 Using the same credentials you can login to the Registry and
 push any Docker image you like to it.
 
+Just note that only developer accounts have push access to the registry
+
 ```bash
 docker login --username jezrien@example.com --password password http://localhost:5000
 
@@ -81,6 +83,12 @@ docker pull hello-world
 docker tag hello-world http://localhost:5000/hello-world
 
 docker push http://localhost:5000/hello-world
+```
+
+To delete images from the registry you can use
+
+```bash
+bin/delete-image localhost:5000 hello-world jezrien@example.com password
 ```
 
 ### CLI

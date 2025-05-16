@@ -1,0 +1,49 @@
+#!/bin/bash
+set -e
+
+if [ "$#" -ne 4 ]; then
+  echo "Usage: $0 REGISTRY IMAGE_NAME USERNAME PASSWORD"
+  echo "Example: $0 localhost:5000 hello-world user@example.com password"
+  exit 1
+fi
+
+registry="$1"
+name="$2"
+username="$3"
+password="$4"
+auth="-u $username:$password"
+
+echo "Deleting image $name from registry $registry..."
+
+tag=$(curl $auth -sSL "https://${registry}/v2/${name}/tags/list" | jq -r '.tags[0]')
+
+if [ "$tag" = "null" ] || [ -z "$tag" ]; then
+  echo "Error: No tags found for image $name"
+  exit 1
+fi
+
+echo "Found tag: $tag"
+
+digest=$(curl $auth -sSL -I \
+  -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+  "https://${registry}/v2/${name}/manifests/${tag}" |
+  awk '$1 == "Docker-Content-Digest:" { print $2 }' |
+  tr -d $'\r')
+
+if [ -z "$digest" ]; then
+  echo "Error: Could not get content digest for image $name:$tag"
+  exit 1
+fi
+
+echo "Found digest: $digest"
+
+delete_result=$(curl $auth -sSL -X DELETE "https://${registry}/v2/${name}/manifests/${digest}")
+delete_status=$?
+
+if [ $delete_status -eq 0 ]; then
+  echo "Successfully deleted image $name:$tag with digest $digest"
+else
+  echo "Error deleting image $name:$tag with digest $digest"
+  echo "Response: $delete_result"
+  exit 1
+fi
