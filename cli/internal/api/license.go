@@ -26,7 +26,7 @@ type Owner struct {
 }
 
 func (c *Client) InspectLicense(licenseKey string) (*License, error) {
-	url := fmt.Sprintf("%s/install/%s", c.BaseURL, licenseKey)
+	url := fmt.Sprintf("%s/install/%s.json", c.BaseURL, licenseKey)
 
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {

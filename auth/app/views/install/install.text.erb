@@ -3,14 +3,18 @@
 set -e
 
 echo "Installing the TWICE command..."
-echo
 
 sudo true
 
-command_path="<%= install_download_path %>?arch=$(arch)&platform=$(uname)"
+command_path="<%= install_download_url %>?arch=$(uname -m)&platform=$(uname)"
 curl -s "$command_path" -o .twice_tmp
 sudo mv .twice_tmp /usr/local/bin/twice
 sudo chmod +x /usr/local/bin/twice
+echo "✅ Installed"
+
+echo
+echo "Starting setup..."
+echo
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Don't use sudo on macOS; Docker Desktop is likely to be running as the user

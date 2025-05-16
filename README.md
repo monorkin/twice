@@ -113,4 +113,4 @@ That's it.
 
 ## Details
 
-A detailed explanation of how all of this works can be found [here](https://stanko.io/articles/foo-bar)
+A detailed explanation of how all of this works can be found [here](https://stanko.io/building-twice-a-clone-of-once-gJKxLYCe26Ak)
