@@ -49,7 +49,9 @@ and then start the server on [localhost:3000](http://localhost:3000).
 
 ## Usage
 
+### Auth
 You can login with any Developer account to the Auth UI.
+
 Out-of-the-box there are several accounts already pre-populated
 (if you've run bin/rails `db:fixtures:load`). You can take a look
 at [developers.yml](auth/db/fixtures/developers.yml) to see which
@@ -57,6 +59,17 @@ accounts exists and what their credentials are.
 
 In the UI you can create products, developers, customers, and
 purchase licenses for customers.
+
+You can also install a product directly from the auth server using this command:
+
+```bash
+/bin/bash -c "$(curl -fsSL http://localhost:3000/install/nx1w-qg52-e5t3-kpa4)"
+```
+
+This will download and install the cli binary, and then run it, passing it
+the license key from the URL.
+
+### Registry
 
 Using the same credentials you can login to the Registry and
 push any Docker image you like to it.
@@ -70,14 +83,25 @@ docker tag hello-world http://localhost:5000/hello-world
 docker push http://localhost:5000/hello-world
 ```
 
-To install a product using the CLI you have to run the following command from the cli directory:
+### CLI
+
+To install a product using the CLI you have to run the following command from the `cli` directory:
 
 ```bash
 go run cmd/twice/main.go setup <license-key>
 # e.g. `go run cmd/twice/main.go setup nx1w-qg52-e5t3-kpa4`
 ```
 
-This will pull the product's Docker image from the registry and spin up a contianer for it
+This will pull the product's Docker image from the registry and spin up a container for it
+## Uninstall
+
+To uninstall the CLI run
+
+```bash
+rm /usr/local/bin/twice
+```
+
+That's it.
 
 ## Details
 
