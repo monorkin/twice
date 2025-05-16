@@ -19,17 +19,24 @@ auth backend for the Registry, and it manages products and license keys.
 
 ## Setup
 
-**First**, from the root of the project run `bin/setup`.
+**First**, make sure you have the following installed:
+1. Ruby 3.4 or newer
+2. Go 1.23 or newer
+3. Docker
+4. Docker Compose
 
-This will do a couple of things needed to get the Registry to talk to Auth.
+**Second**, from the root of the project run `bin/setup`.
 
-**Then**, in a separate terminal window run `docker compose up` to start the registry.
+This will setup the Registry and the Auth server so that they can talk to one another.
+And it will compile the CLI, and prepare it to be distributed using the Auth server.
+
+**Third**, in a separate terminal window, from the `registry` directory,
+run `docker compose up` to start the registry.
 
 Check out the docker-compose.yml file to see how the registry is configured, and 
 change it for your OS.
 
-**Finally**, in another terminal window enter the auth directory and 
-run:
+**Fourth**, in another terminal window from the `auth` directory run:
 
 ```bash
 bundle
@@ -37,7 +44,7 @@ bin/rails db:create db:migrate db:fixtures:load
 bin/dev
 ```
 
-This will install all the necessary depenencies, create the database, run the migrations,
+This will install all the necessary dependencies, create the database, run the migrations,
 and then start the server on [localhost:3000](http://localhost:3000).
 
 ## Usage

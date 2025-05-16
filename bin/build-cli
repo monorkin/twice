@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+APP_NAME="twice"
+BASE_DIR="./cli"
+BUILD_DIR="./build"
+ENTRYPOINT="./cmd/twice/main.go"
+
+mkdir -p $BUILD_DIR
+cd $BASE_DIR
+
+echo "Building for Linux (x86_64)..."
+GOOS=linux GOARCH=amd64 go build -o $BUILD_DIR/$APP_NAME-linux-x86_64 $ENTRYPOINT
+
+echo "Building for Linux (ARM64)..."
+GOOS=linux GOARCH=arm64 go build -o $BUILD_DIR/$APP_NAME-linux-arm64 $ENTRYPOINT
+
+echo "Building for macOS (x86_64)..."
+GOOS=darwin GOARCH=amd64 go build -o $BUILD_DIR/$APP_NAME-darwin-x86_64 $ENTRYPOINT
+
+echo "Building for macOS (ARM64)..."
+GOOS=darwin GOARCH=arm64 go build -o $BUILD_DIR/$APP_NAME-darwin-arm64 $ENTRYPOINT
+
+echo "✅ All builds completed!"
+
+cp $BUILD_DIR/$APP_NAME-linux-x86_64 ../auth/storage/
+cp $BUILD_DIR/$APP_NAME-linux-arm64 ../auth/storage/
+cp $BUILD_DIR/$APP_NAME-darwin-x86_64 ../auth/storage/
+cp $BUILD_DIR/$APP_NAME-darwin-arm64 ../auth/storage/
+
+echo "✅ Copied builds to auth/storage directory!"

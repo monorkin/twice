@@ -20,6 +20,7 @@ go.work
 # Binary output directories
 bin/
 dist/
+build/
 
 # Local development environment files
 .env
