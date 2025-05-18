@@ -1,0 +1,32 @@
+package cmd
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/spf13/cobra"
+
+	"github.com/monorkin/twice/cli/internal/config"
+)
+
+var cfg *config.Config
+
+func NewRootCmd() *cobra.Command {
+	rootCmd := &cobra.Command{
+		Use:   "twice",
+		Short: "Twice CLI - A client for interacting with the Twice distribution system",
+		Long:  `A command line interface for the Twice distribution system.`,
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+			var err error
+			cfg, err = config.LoadOrCreateConfig()
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+		},
+	}
+
+	rootCmd.AddCommand(NewSetupCmd())
+
+	return rootCmd
+}

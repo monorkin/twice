@@ -16,9 +16,11 @@ echo
 echo "Starting setup..."
 echo
 
+<% full_license_key = "#{@license.key}@#{request.base_url}" %>
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Don't use sudo on macOS; Docker Desktop is likely to be running as the user
-  /usr/local/bin/twice setup <%= @license.key %>
+  /usr/local/bin/twice setup <%= full_license_key %>
 else
-  sudo /usr/local/bin/twice setup <%= @license.key %>
+  sudo /usr/local/bin/twice setup <%= full_license_key %>
 fi

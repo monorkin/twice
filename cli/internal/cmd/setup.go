@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/monorkin/twice/cli/internal/api"
+	"github.com/monorkin/twice/cli/internal/config"
 	"github.com/monorkin/twice/cli/internal/docker"
 	"github.com/spf13/cobra"
 )
@@ -63,7 +64,15 @@ func runSetupCmd(licenseKey string) {
 	}
 
 	// Step 3 - Check the license
-	apiClient := api.NewClient("localhost:3000")
+	licenseParts := strings.Split(licenseKey, "@")
+	if len(licenseParts) != 2 {
+		println(CrossIcon + " License key is not valid")
+	}
+
+	authServer := licenseParts[1]
+	licenseKey = licenseParts[0]
+
+	apiClient := api.NewClient(authServer)
 	license, err := apiClient.InspectLicense(licenseKey)
 	if err != nil {
 		println(CrossIcon + " License is not valid")
@@ -77,6 +86,25 @@ func runSetupCmd(licenseKey string) {
 	fmt.Printf("   └──Product: %s\n", license.Product.Name)
 	// fmt.Printf("   Repository: %s\n", license.Product.Repository)
 	// fmt.Printf("   Registry: %s\n", license.Product.Registry)
+
+	productConfig := config.NewProductConfig(authServer, licenseKey)
+	productConfig.EmailAddress = license.Owner.EmailAddress
+	productConfig.Product = license.Product.Name
+	productConfig.Registry = license.Product.Registry
+	productConfig.Repository = license.Product.Repository
+
+	err = cfg.AddProduct(productConfig)
+	if err != nil {
+		println(CrossIcon + " Failed to add the product to the config")
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	if _, err := cfg.Save(); err != nil {
+		println(CrossIcon + " Failed to save the product configuration")
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	println(CheckMarkIcon + " Product added to the config")
 
 	// Step 4 - Download the app image
 	err = docker.PullImageWithIdentityToken(
@@ -101,13 +129,13 @@ func runSetupCmd(licenseKey string) {
 
 	for {
 		fmt.Print("Enter the domain (e.g. example.com) where you'll run the app: ")
-		domain, _ := reader.ReadString('\n')
-		domain = strings.TrimSpace(domain)
+		rawDomain, _ := reader.ReadString('\n')
+		domain = strings.TrimSpace(rawDomain)
 
 		fmt.Print("Do you want to enable HTTPS? (yes/NO): ")
 		httpsAnswer, _ := reader.ReadString('\n')
 		httpsAnswer = strings.TrimSpace(strings.ToLower(httpsAnswer))
-		enableHTTPS := httpsAnswer == "yes" || httpsAnswer == "y"
+		enableHTTPS = httpsAnswer == "yes" || httpsAnswer == "y"
 
 		fmt.Printf("   ├──Domain: %s\n", domain)
 		fmt.Printf("   └──HTTPS: %t\n", enableHTTPS)
@@ -119,6 +147,26 @@ func runSetupCmd(licenseKey string) {
 			break
 		}
 	}
+
+	fmt.Printf("   ├──Domain: %s\n", domain)
+	fmt.Printf("   └──HTTPS: %t\n", enableHTTPS)
+
+	productConfig.Domain = domain
+	productConfig.HTTPS = enableHTTPS
+
+	err = cfg.UpdateProduct(productConfig)
+	if err != nil {
+		println(CrossIcon + " Failed to set domain for product")
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+
+	if _, err := cfg.Save(); err != nil {
+		println(CrossIcon + " Failed to set domain for product")
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	println(CheckMarkIcon + " Product config saved")
 
 	// Step 6 - Run the app
 	err = docker.RunApp(
