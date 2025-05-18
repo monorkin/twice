@@ -9,8 +9,6 @@ import (
 	"github.com/monorkin/twice/cli/internal/config"
 )
 
-var cfg *config.Config
-
 func NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "twice",
@@ -27,6 +25,7 @@ func NewRootCmd() *cobra.Command {
 	}
 
 	rootCmd.AddCommand(NewSetupCmd())
+	rootCmd.AddCommand(NewStatusCmd())
 
 	return rootCmd
 }

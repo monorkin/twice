@@ -12,11 +12,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	CheckMarkIcon = "✅"
-	CrossIcon     = "❌"
-)
-
 func NewSetupCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "setup <license-key>",
@@ -132,10 +127,10 @@ func runSetupCmd(licenseKey string) {
 		rawDomain, _ := reader.ReadString('\n')
 		domain = strings.TrimSpace(rawDomain)
 
-		fmt.Print("Do you want to enable HTTPS? (yes/NO): ")
+		fmt.Print("Do you want to enable HTTPS? (YES/no): ")
 		httpsAnswer, _ := reader.ReadString('\n')
 		httpsAnswer = strings.TrimSpace(strings.ToLower(httpsAnswer))
-		enableHTTPS = httpsAnswer == "yes" || httpsAnswer == "y"
+		enableHTTPS = httpsAnswer != "no" && httpsAnswer != "n"
 
 		fmt.Printf("   ├──Domain: %s\n", domain)
 		fmt.Printf("   └──HTTPS: %t\n", enableHTTPS)
@@ -147,9 +142,6 @@ func runSetupCmd(licenseKey string) {
 			break
 		}
 	}
-
-	fmt.Printf("   ├──Domain: %s\n", domain)
-	fmt.Printf("   └──HTTPS: %t\n", enableHTTPS)
 
 	productConfig.Domain = domain
 	productConfig.HTTPS = enableHTTPS
@@ -169,13 +161,7 @@ func runSetupCmd(licenseKey string) {
 	println(CheckMarkIcon + " Product config saved")
 
 	// Step 6 - Run the app
-	err = docker.RunApp(
-		license.Product.Repository,
-		license.Product.Registry,
-		license.Owner.EmailAddress,
-		domain,
-		enableHTTPS,
-	)
+	err = docker.RunProduct(productConfig)
 	if err != nil {
 		println(CrossIcon + " App run failed")
 		fmt.Fprintln(os.Stderr, err)

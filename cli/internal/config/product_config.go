@@ -3,6 +3,7 @@ package config
 import (
 	"crypto/sha1"
 	"encoding/hex"
+	"fmt"
 	"strings"
 )
 
@@ -44,4 +45,14 @@ func (p *ProductConfig) ContainerName() string {
 	}
 
 	return imageName + "-" + digest
+}
+
+func (p *ProductConfig) Image() string {
+	image := fmt.Sprintf("%s/%s", p.Registry, p.Repository)
+
+	if !strings.Contains(image, ":") {
+		image = fmt.Sprintf("%s:latest", image)
+	}
+
+	return image
 }

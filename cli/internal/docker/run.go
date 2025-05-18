@@ -6,12 +6,10 @@ import (
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+	"github.com/monorkin/twice/cli/internal/config"
 )
 
-func RunApp(image string, registry string, emailAddress string, domain string, tls_enabled bool) error {
-	image = SanitizeImageName(image, registry)
-	containerName := ContainerNameFromImage(image)
-
+func RunProduct(product *config.ProductConfig) error {
 	ctx := context.Background()
 	dockerClient, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
@@ -20,11 +18,11 @@ func RunApp(image string, registry string, emailAddress string, domain string, t
 	defer dockerClient.Close()
 
 	config := &container.Config{
-		Image: image,
+		Image: product.Image(),
 		Env: []string{
-			"APP_DOMAIN=" + domain,
-			"TLS_EMAIL=" + emailAddress,
-			fmt.Sprintf("TLS_ENABLED=%t", tls_enabled),
+			"APP_DOMAIN=" + product.Domain,
+			"TLS_EMAIL=" + product.EmailAddress,
+			fmt.Sprintf("TLS_ENABLED=%t", product.HTTPS),
 		},
 	}
 
@@ -40,7 +38,7 @@ func RunApp(image string, registry string, emailAddress string, domain string, t
 		hostConfig,
 		nil,
 		nil,
-		containerName,
+		product.ContainerName(),
 	)
 	if err != nil {
 		return fmt.Errorf("failed to create app container: %w", err)
