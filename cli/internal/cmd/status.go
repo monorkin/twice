@@ -1,6 +1,12 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"os"
+
+	"github.com/monorkin/twice/cli/internal/docker"
+	"github.com/olekukonko/tablewriter"
+	"github.com/spf13/cobra"
+)
 
 func NewStatusCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -17,5 +23,24 @@ func NewStatusCmd() *cobra.Command {
 }
 
 func runStatusCmd() {
-	println("Running status command...")
+	table := tablewriter.NewWriter(os.Stdout)
+	table.Header([]string{"Product", "License", "Auth server", "Status"})
+
+	for _, product := range cfg.Products {
+		status := "Unknown"
+
+		running, err := docker.IsProductRunning(&product)
+		if err == nil {
+			if running {
+				status = "Running"
+			} else {
+				status = "Stopped"
+			}
+		}
+
+		data := []string{product.Product, product.LicenseKey, product.AuthServer, status}
+		table.Append(data)
+	}
+
+	table.Render()
 }
