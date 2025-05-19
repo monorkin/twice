@@ -17,13 +17,15 @@ private Docker Registry.
 The whole installation process looks like this:
 
 ```bash
-# Download and install the Twice CLI, 
-# and then install a product with the license key nx1w-qg52-e5t3-kpa4
+# Download and install the Twice CLI,
+# and then install a product with the license key nx1w-qg52-e5t3-kpa4 from auth.example.com
 /bin/bash -c "$(curl -fsSL http://auth.example.com/install/nx1w-qg52-e5t3-kpa4)"
 
-# Install a product with the license key nx1w-qg52-e5t3-kpa4 from localhost:3000
+# Install a product with the license key nx1w-qg52-e5t3-kpa4 from example.org
 twice setup nx1w-qg52-e5t3-kpa4@example.org
 ```
+
+You can distribute one or more products this way, and even copies of the same product.
 
 ## About
 
