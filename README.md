@@ -6,7 +6,7 @@ used by [Campfire](https://once.com/campfire) and [Writebook](https://once.com/w
 Through Twice you can generate and distribute license keys with which
 users can install and run Docker containers of your products on their own servers.
 
-## Example
+## About
 
 Twice gives you the ability to issue license keys
 that can be used to install a product.
@@ -45,8 +45,6 @@ OK
 ```
 
 You can distribute one or more products this way, and even copies of the same product.
-
-## About
 
 A detailed explanation of how all of this works, and how Twice came to be, can be found [here](https://stanko.io/building-twice-a-clone-of-once-gJKxLYCe26Ak).
 [Release 0.1.0](https://github.com/monorkin/twice/releases/tag/0.1.0) contains all the code referenced in that article.
