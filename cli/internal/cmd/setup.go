@@ -75,6 +75,7 @@ func runSetupCmd(licenseKey string) {
 	}
 
 	println(CheckMarkIcon + " License is valid")
+	fmt.Printf("   ├──Auth server: %s\n", authServer)
 	fmt.Printf("   ├──License key: %s\n", license.Key)
 	fmt.Printf("   ├──License owner: %s\n", license.Owner.EmailAddress)
 	fmt.Printf("   └──Product: %s\n", license.Product.Name)

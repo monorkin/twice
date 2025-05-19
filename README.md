@@ -23,6 +23,25 @@ The whole installation process looks like this:
 
 # Install a product with the license key nx1w-qg52-e5t3-kpa4 from example.org
 twice setup nx1w-qg52-e5t3-kpa4@example.org
+✅ Docker is installed
+✅ Docker is running
+✅ License is valid
+   ├──Auth server: example.org
+   ├──License key: nx1w-qg52-e5t3-kpa4
+   ├──License owner: kaladin.stormblessed@example.com
+   └──Product: Sphere Sorter
+✅ Product added to the config
+✅ App downloaded
+Enter the domain (e.g. example.com) where you'll run the app: example.com
+Do you want to enable HTTPS? (YES/no): yes
+   ├──Domain: example.com
+   └──HTTPS: true
+Is this correct? (yes/NO): yes
+✅ Product config saved
+✅ App is running
+
+curl -H "Host: example.com" https://localhost/up
+OK
 ```
 
 You can distribute one or more products this way, and even copies of the same product.
