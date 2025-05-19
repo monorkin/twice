@@ -1,8 +1,34 @@
 # Twice
 
-Twice is a clone of the distribution system used by [Once](https://once.com) that's used with 
-[Campfire](https://once.com/campfire) 
-and [Writebook](https://once.com/writebook)- hence the name, this is a second implementation of Once.
+Twice is a clone of the [Once](https://once.com) distribution system 
+used by [Campfire](https://once.com/campfire) and [Writebook](https://once.com/writebook).
+
+Through Twice you can generate and distribute license keys with which
+users can install and run Docker containers of your products on their servers.
+
+## Example
+
+Twice gives you the ability to issue license keys
+that can be used to install a product.
+
+Products are Docker containers installed from Docker images hosted on a 
+private Docker Registry.
+
+The whole installation process looks like this:
+
+```bash
+# Download and install the Twice CLI, 
+# and then install a product with the license key nx1w-qg52-e5t3-kpa4
+/bin/bash -c "$(curl -fsSL http://auth.example.com/install/nx1w-qg52-e5t3-kpa4)"
+
+# Install a product with the license key nx1w-qg52-e5t3-kpa4 from localhost:3000
+twice setup nx1w-qg52-e5t3-kpa4@example.org
+```
+
+## About
+
+A detailed explanation of how all of this works, and how Twice came to be, can be found [here](https://stanko.io/building-twice-a-clone-of-once-gJKxLYCe26Ak).
+[Release 0.1.0](https://github.com/monorkin/twice/releases/tag/0.1.0) contains all the code referenced in that article.
 
 ## Repo organization
 This is a mono-repo that contains 3 projects:
@@ -13,11 +39,11 @@ This is a mono-repo that contains 3 projects:
 **Auth** handles 3 tasks - it provides installation scripts and binaries, it is the 
 auth backend for the Registry, and it manages products and license keys.
 
-**CLI** installs a product associated with a given license key.
+**CLI** installs a product associated with a given license key and manages all installed products.
 
 **Registry** is a Docker Registry that hosts app images for products.
 
-## Setup
+## Development
 
 **First**, make sure you have the following installed:
 1. Ruby 3.4 or newer
@@ -111,6 +137,3 @@ rm /usr/local/bin/twice
 
 That's it.
 
-## Details
-
-A detailed explanation of how all of this works can be found [here](https://stanko.io/building-twice-a-clone-of-once-gJKxLYCe26Ak)
