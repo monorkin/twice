@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -10,7 +9,7 @@ import (
 )
 
 type Config struct {
-	Products []ProductConfig `json:"products"`
+	Products []Product `json:"products"`
 }
 
 func LoadOrCreateConfig() (*Config, error) {
@@ -89,7 +88,29 @@ func (c *Config) SaveTo(path string) (string, error) {
 	return path, nil
 }
 
-func (c *Config) AddProduct(newProduct *ProductConfig) error {
+func (c *Config) FindOrInitializeProduct(authServer string, licenseKey string) (bool, *Product) {
+	product := c.FindProduct(func(product *Product) bool {
+		return product.AuthServer == authServer && product.LicenseKey == licenseKey
+	})
+
+	if product == nil {
+		return false, NewProduct(authServer, licenseKey)
+	}
+
+	return true, product
+}
+
+func (c *Config) FindProduct(predicate func(product *Product) bool) *Product {
+	for _, product := range c.Products {
+		if predicate(&product) {
+			return &product
+		}
+	}
+
+	return nil
+}
+
+func (c *Config) AddProduct(newProduct *Product) error {
 	for _, product := range c.Products {
 		if product.AuthServer == newProduct.AuthServer && product.LicenseKey == newProduct.LicenseKey {
 			return errors.New("product with this license key already exists")
@@ -101,7 +122,7 @@ func (c *Config) AddProduct(newProduct *ProductConfig) error {
 	return nil
 }
 
-func (c *Config) RemoveProduct(product *ProductConfig) error {
+func (c *Config) RemoveProduct(product *Product) error {
 	for i, p := range c.Products {
 		if product.AuthServer == p.AuthServer && product.LicenseKey == p.LicenseKey {
 			c.Products = append(c.Products[:i], c.Products[i+1:]...)
@@ -112,12 +133,10 @@ func (c *Config) RemoveProduct(product *ProductConfig) error {
 	return errors.New("product with this license key not found")
 }
 
-func (c *Config) UpdateProduct(product *ProductConfig) error {
-	fmt.Printf("Updated Product: %+v\n", product)
+func (c *Config) UpdateProduct(product *Product) error {
 	for i, p := range c.Products {
 		if product.AuthServer == p.AuthServer && product.LicenseKey == p.LicenseKey {
 			c.Products[i] = *product
-			fmt.Printf("New Products: %+v\n", c.Products)
 			return nil
 		}
 	}

@@ -9,7 +9,7 @@ import (
 	"github.com/monorkin/twice/cli/internal/config"
 )
 
-func IsProductRunning(product *config.ProductConfig) (bool, error) {
+func IsProductRunning(product *config.Product) (bool, error) {
 	containerName := product.ContainerName()
 	return IsContainerRunning(containerName)
 }
@@ -30,7 +30,7 @@ func IsContainerRunning(containerName string) (bool, error) {
 	return dockerContainer.State.Running, nil
 }
 
-func StartProductContainer(product *config.ProductConfig) error {
+func StartProductContainer(product *config.Product) error {
 	containerName := product.ContainerName()
 	return StartContainer(containerName)
 }

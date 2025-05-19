@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/monorkin/twice/cli/internal/api"
-	"github.com/monorkin/twice/cli/internal/config"
 	"github.com/monorkin/twice/cli/internal/docker"
 	"github.com/spf13/cobra"
 )
@@ -82,18 +81,23 @@ func runSetupCmd(licenseKey string) {
 	// fmt.Printf("   Repository: %s\n", license.Product.Repository)
 	// fmt.Printf("   Registry: %s\n", license.Product.Registry)
 
-	productConfig := config.NewProductConfig(authServer, licenseKey)
-	productConfig.EmailAddress = license.Owner.EmailAddress
-	productConfig.Product = license.Product.Name
-	productConfig.Registry = license.Product.Registry
-	productConfig.Repository = license.Product.Repository
+	persisted, product := cfg.FindOrInitializeProduct(authServer, licenseKey)
+	product.EmailAddress = license.Owner.EmailAddress
+	product.Product = license.Product.Name
+	product.Registry = license.Product.Registry
+	product.Repository = license.Product.Repository
 
-	err = cfg.AddProduct(productConfig)
+	if persisted {
+		err = cfg.UpdateProduct(product)
+	} else {
+		err = cfg.AddProduct(product)
+	}
 	if err != nil {
 		println(CrossIcon + " Failed to add the product to the config")
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
+
 	if _, err := cfg.Save(); err != nil {
 		println(CrossIcon + " Failed to save the product configuration")
 		fmt.Fprintln(os.Stderr, err)
@@ -143,10 +147,10 @@ func runSetupCmd(licenseKey string) {
 		}
 	}
 
-	productConfig.Domain = domain
-	productConfig.HTTPS = enableHTTPS
+	product.Domain = domain
+	product.HTTPS = enableHTTPS
 
-	err = cfg.UpdateProduct(productConfig)
+	err = cfg.UpdateProduct(product)
 	if err != nil {
 		println(CrossIcon + " Failed to set domain for product")
 		fmt.Fprintln(os.Stderr, err)
@@ -161,7 +165,7 @@ func runSetupCmd(licenseKey string) {
 	println(CheckMarkIcon + " Product config saved")
 
 	// Step 6 - Run the app
-	err = docker.RunProduct(productConfig)
+	err = docker.RunProduct(product)
 	if err != nil {
 		println(CrossIcon + " App run failed")
 		fmt.Fprintln(os.Stderr, err)

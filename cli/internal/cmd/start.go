@@ -24,7 +24,7 @@ func NewStartCmd() *cobra.Command {
 }
 
 func runStartCmd(id string) {
-	var product *config.ProductConfig
+	var product *config.Product
 	for _, p := range cfg.Products {
 		if p.ContainerName() == id {
 			product = &p

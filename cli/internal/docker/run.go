@@ -9,7 +9,7 @@ import (
 	"github.com/monorkin/twice/cli/internal/config"
 )
 
-func RunProduct(product *config.ProductConfig) error {
+func RunProduct(product *config.Product) error {
 	ctx := context.Background()
 	dockerClient, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
