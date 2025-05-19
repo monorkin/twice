@@ -20,6 +20,7 @@ func RunProduct(product *config.Product) error {
 	config := &container.Config{
 		Image: product.Image(),
 		Env: []string{
+			"SECRET_KEY_BASE=" + product.SecretKeyBase,
 			"SSL_EMAIL=" + product.EmailAddress,
 			"SSL_DOMAIN=" + product.Domain,
 			fmt.Sprintf("DISABLE_SSL=%t", !product.HTTPS),
