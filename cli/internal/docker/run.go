@@ -20,9 +20,11 @@ func RunProduct(product *config.Product) error {
 	config := &container.Config{
 		Image: product.Image(),
 		Env: []string{
-			"APP_DOMAIN=" + product.Domain,
-			"TLS_EMAIL=" + product.EmailAddress,
-			fmt.Sprintf("TLS_ENABLED=%t", product.HTTPS),
+			"SSL_EMAIL=" + product.EmailAddress,
+			"SSL_DOMAIN=" + product.Domain,
+			fmt.Sprintf("DISABLE_SSL=%t", !product.HTTPS),
+			"VAPID_PRIVATE_KEY=" + product.VAPIDPrivateKey,
+			"VAPID_PUBLIC_KEY=" + product.VAPIDPublicKey,
 		},
 	}
 

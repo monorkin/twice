@@ -24,6 +24,7 @@ type Product struct {
 	Repository      string `json:"repository"`
 	VAPIDPublicKey  string `json:"vapid_public_key"`
 	VAPIDPrivateKey string `json:"vapid_private_key"`
+	SecretKeyBase   string `json:"secret_key_base"`
 }
 
 func NewProduct(authServer string, licenseKey string) *Product {
@@ -32,7 +33,13 @@ func NewProduct(authServer string, licenseKey string) *Product {
 		LicenseKey: licenseKey,
 	}
 
-	product.generateVAPIDKeys()
+	if err := product.generateSecretKeyBase(); err != nil {
+		panic(errors.Wrap(err, "failed to generate secret key base"))
+	}
+
+	if err := product.generateVAPIDKeys(); err != nil {
+		panic(errors.Wrap(err, "failed to generate VAPID keys"))
+	}
 
 	return product
 }
@@ -73,6 +80,17 @@ func (p *Product) Image() string {
 	return image
 }
 
+func (p *Product) generateSecretKeyBase() error {
+	key := make([]byte, 64)
+	if _, err := rand.Read(key); err != nil {
+		return errors.Wrap(err, "failed to generate secret key base")
+	}
+
+	p.SecretKeyBase = hex.EncodeToString(key)
+
+	return nil
+}
+
 func (p *Product) generateVAPIDKeys() error {
 	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
@@ -81,8 +99,8 @@ func (p *Product) generateVAPIDKeys() error {
 
 	p.VAPIDPrivateKey = base64.RawURLEncoding.EncodeToString(priv.D.Bytes())
 
-	x := priv.PublicKey.X.Bytes()
-	y := priv.PublicKey.Y.Bytes()
+	x := priv.X.Bytes()
+	y := priv.Y.Bytes()
 	pubBytes := append([]byte{0x04}, append(x, y...)...)
 
 	p.VAPIDPublicKey = base64.RawURLEncoding.EncodeToString(pubBytes)
