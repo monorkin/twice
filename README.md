@@ -4,7 +4,7 @@ Twice is a clone of the [Once](https://once.com) distribution system
 used by [Campfire](https://once.com/campfire) and [Writebook](https://once.com/writebook).
 
 Through Twice you can generate and distribute license keys with which
-users can install and run Docker containers of your products on their servers.
+users can install and run Docker containers of your products on their own servers.
 
 ## Example
 
