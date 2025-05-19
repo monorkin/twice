@@ -139,3 +139,9 @@ rm /usr/local/bin/twice
 
 That's it.
 
+## License
+
+This project is licensed under the [MIT License](./LICENSE), you can read the full license [here](./LICENSE).
+
+Long story short, you can do whatever you want with this code, as long as you include
+the original, unchanged, license of this project in your project and give proper attribution.
