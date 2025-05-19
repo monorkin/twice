@@ -24,7 +24,7 @@ func NewStatusCmd() *cobra.Command {
 
 func runStatusCmd() {
 	table := tablewriter.NewWriter(os.Stdout)
-	table.Header([]string{"Product", "License", "Auth server", "Status"})
+	table.Header([]string{"ID", "Product", "License", "Auth server", "Status"})
 
 	for _, product := range cfg.Products {
 		status := "Unknown"
@@ -38,7 +38,7 @@ func runStatusCmd() {
 			}
 		}
 
-		data := []string{product.Product, product.LicenseKey, product.AuthServer, status}
+		data := []string{product.ID(), product.Product, product.LicenseKey, product.AuthServer, status}
 		table.Append(data)
 	}
 

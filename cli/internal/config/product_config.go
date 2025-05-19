@@ -25,6 +25,10 @@ func NewProductConfig(authServer string, licenseKey string) *ProductConfig {
 	}
 }
 
+func (p *ProductConfig) ID() string {
+	return p.ContainerName()
+}
+
 func (p *ProductConfig) ContainerName() string {
 	h := sha1.New()
 	h.Write([]byte(p.AuthServer))

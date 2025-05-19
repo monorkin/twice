@@ -18,7 +18,8 @@ func NewRootCmd() *cobra.Command {
 			var err error
 			cfg, err = config.LoadOrCreateConfig()
 			if err != nil {
-				fmt.Println(err)
+				fmt.Println("Couldn't load or create a config")
+				fmt.Fprintln(os.Stderr, err)
 				os.Exit(1)
 			}
 		},

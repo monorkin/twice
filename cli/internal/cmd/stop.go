@@ -6,9 +6,9 @@ import (
 
 func NewStopCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "stop",
+		Use:   "stop <ID>",
 		Short: "Stops a running product",
-		Long:  `Stops a running product without uninstalling it.`,
+		Long:  `Stops a running product, with the given ID, without uninstalling it.`,
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			runStopCmd(args[0])
