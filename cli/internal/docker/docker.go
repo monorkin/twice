@@ -1,6 +1,7 @@
 package docker
 
 import (
+	"errors"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -32,4 +33,11 @@ func IsRunning() (bool, error) {
 	}
 
 	return false, nil
+}
+
+func Start() error {
+	println("Starting Docker...")
+
+	// TODO: Implement the logic to start Docker
+	return errors.New("startDocker not implemented")
 }

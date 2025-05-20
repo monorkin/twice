@@ -32,7 +32,7 @@ twice setup nx1w-qg52-e5t3-kpa4@example.org
    └──Product: Sphere Sorter
 ✅ Product added to the config
 ✅ App downloaded
-Enter the domain (e.g. example.com) where you'll run the app: example.com
+Enter the domain (e.g. example.com) where you\'ll run the app: example.com
 Do you want to enable HTTPS? (YES/no): yes
    ├──Domain: example.com
    └──HTTPS: true
@@ -42,6 +42,23 @@ Is this correct? (yes/NO): yes
 
 curl -H "Host: example.com" https://localhost/up
 OK
+
+twice status
+┌────────────────────────┬───────────────┬─────────────────────┬────────────────┬─────────┐
+│           ID           │    PRODUCT    │       LICENSE       │  AUTH SERVER   │ STATUS  │
+├────────────────────────┼───────────────┼─────────────────────┼────────────────┼─────────┤
+│ sphere-sorter-580e3812 │ Sphere Sorter │ nx1w-qg52-e5t3-kpa4 │  example.org   │ Running │
+└────────────────────────┴───────────────┴─────────────────────┴────────────────┴─────────┘
+
+twice stop sphere-sorter-580e3812
+✅ Product stopped
+
+twice status
+┌────────────────────────┬───────────────┬─────────────────────┬────────────────┬─────────┐
+│           ID           │    PRODUCT    │       LICENSE       │  AUTH SERVER   │ STATUS  │
+├────────────────────────┼───────────────┼─────────────────────┼────────────────┼─────────┤
+│ sphere-sorter-580e3812 │ Sphere Sorter │ nx1w-qg52-e5t3-kpa4 │  example.org   │ Stopped │
+└────────────────────────┴───────────────┴─────────────────────┴────────────────┴─────────┘
 ```
 
 You can distribute one or more products this way, and even copies of the same product.

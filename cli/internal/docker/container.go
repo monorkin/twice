@@ -50,3 +50,24 @@ func StartContainer(containerName string) error {
 
 	return nil
 }
+
+func StopProductContainer(product *config.Product) error {
+	containerName := product.ContainerName()
+	return StopContainer(containerName)
+}
+
+func StopContainer(containerName string) error {
+	ctx := context.Background()
+	dockerClient, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
+	if err != nil {
+		return fmt.Errorf("failed to create Docker client: %v", err)
+	}
+	defer dockerClient.Close()
+
+	err = dockerClient.ContainerStop(ctx, containerName, container.StopOptions{})
+	if err != nil {
+		return fmt.Errorf("failed to stop container: %v", err)
+	}
+
+	return nil
+}
